@@ -13,7 +13,7 @@ COPY . .
 EXPOSE 8080  
 
 # Set environment variables
-ENV PORT 8080  
+ENV PORT=8080  
 
 # Start the Streamlit app
-CMD ["streamlit", "run", "dashboard.py", "--server.port", "$PORT", "--server.enableCORS", "false"]
+CMD streamlit run dashboard.py --server.port=$PORT --server.address=0.0.0.0 --server.enableCORS=false
