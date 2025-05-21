@@ -1,0 +1,454 @@
+from m5stack import *
+from m5stack_ui import *
+from uiflow import *
+import urequests
+from libs.json_py import *
+import json
+
+import ntptime
+import time
+import unit
+import math
+
+
+screen = M5Screen()
+screen.clean_screen()
+screen.set_screen_bg_color(0x1d1d1d)
+
+env3_0 = unit.get(unit.ENV3, unit.PORTA)
+pir_0 = unit.get(unit.PIR, unit.PORTB)
+tvoc_0 = unit.get(unit.TVOC, unit.PORTC)
+
+SERVER_URL = 'http://192.168.1.123:8080/upload'
+AUDIO_TRIGGER_URL = 'http://192.168.1.123:8080/announce'
+AUDIO_DOWNLOAD_URL = 'http://192.168.1.123:8080/audio'
+AUDIO_FILE_PATH = '/flash/announcement.wav'
+counter = 0
+counter_2 = 0
+
+payload = None
+weather_results = None
+forecast_results = None
+
+
+datetime = None
+timetime = None
+
+indoor_temp = None
+indoor_humidity = None
+indoor_air_quality = None
+
+weather_out = None
+temp_out = None
+hum_out = None
+press_out = None
+
+forecast_0 = None
+forecast_1 = None
+forecast_2 = None
+forecast_3 = None
+forecast_4 = None
+forecast_5 = None
+
+
+date = M5Label('dd/mm/yyyy', x=19, y=14, color=0xa0a0a0, font=FONT_MONT_14, parent=None)
+time = M5Label('00:00:00', x=138, y=14, color=0xa0a0a0, font=FONT_MONT_14, parent=None)
+mode = M5Label('mode', x=258, y=14, color=0xa0a0a0, font=FONT_MONT_14, parent=None)
+
+weather_icon = M5Img("res/default.png", x=22, y=53, parent=None)
+
+temp = M5Label('00', x=210, y=53, color=0xffffff, font=FONT_MONT_26, parent=None)
+celsius = M5Label('C', x=270, y=53, color=0xffffff, font=FONT_MONT_26, parent=None)
+deg = M5Label('0', x=262, y=55, color=0xffffff, font=FONT_MONT_10, parent=None)
+hum = M5Label('00', x=210, y=97, color=0xffffff, font=FONT_MONT_26, parent=None)
+pourc = M5Label('%', x=262, y=97, color=0xffffff, font=FONT_MONT_26, parent=None)
+pressure = M5Label('000', x=193, y=143, color=0xffffff, font=FONT_MONT_26, parent=None)
+pa = M5Label('Pa', x=262, y=143, color=0xffffff, font=FONT_MONT_26, parent=None)
+
+f0 = M5Img("res/default.png", x=32, y=45, parent=None)
+f0_date = M5Label('yyyy-mm-dd', x=45, y=110, color=0xa0a0a0, font=FONT_MONT_10, parent=None)
+
+f1 = M5Img("res/default.png", x=130, y=45, parent=None)
+f1_date = M5Label('yyyy-mm-dd', x=137, y=110, color=0xa0a0a0, font=FONT_MONT_10, parent=None)
+
+f2 = M5Img("res/default.png", x=230, y=45, parent=None)
+f2_date = M5Label('yyyy-mm-dd', x=235, y=110, color=0xa0a0a0, font=FONT_MONT_10, parent=None)
+
+f3 = M5Img("res/default.png", x=32, y=130, parent=None)
+f3_date = M5Label('yyyy-mm-dd', x=35, y=200, color=0xa0a0a0, font=FONT_MONT_10, parent=None)
+
+f4 = M5Img("res/default.png", x=130, y=130, parent=None)
+f4_date = M5Label('yyyy-mm-dd', x=135, y=200, color=0xa0a0a0, font=FONT_MONT_10, parent=None)
+
+f5 = M5Img("res/default.png", x=230, y=130, parent=None)
+f5_date = M5Label('yyyy-mm-dd', x=235, y=200, color=0xa0a0a0, font=FONT_MONT_10, parent=None)
+
+
+
+location = M5Label('location', x=19, y=178, color=0xffffff, font=FONT_MONT_26, parent=None)
+description = M5Label('description', x=19, y=206, color=0xa0a0a0, font=FONT_MONT_22, parent=None)
+
+
+
+
+# Describe this function...
+def getCurrentWeather():
+  global payload, weather_results, forecast_results, forecast_0, temp_out, hum_out, press_out, datetime, timetime, indoor_temp, weather_out, indoor_humidity, forecast_1, forecast_2, forecast_3, forecast_4, forecast_5
+  try:
+    req = urequests.request(method='GET', url='http://api.openweathermap.org/data/2.5/weather?q=Lausanne&appid=7095a73973c7773e2f0819c63c7befe6&units=metric', headers={})
+    weather_results = json.loads((req.text))
+    location.set_text(str(weather_results['name']))
+    temp_out = (weather_results['main'])['temp']
+    hum_out = (weather_results['main'])['humidity']
+    press_out = (weather_results['main'])['pressure']
+    if ('weather' in weather_results.keys()) and not not len(weather_results['weather']):
+      description.set_text(str((weather_results['weather'])[0]['description']))
+      weather_out = (weather_results['weather'])[0]['description']
+      description.set_hidden(False)
+      if ((weather_results['weather'])[0]['main']) == 'Clear':
+        weather_icon.set_img_src("res/sun.png")
+      if ((weather_results['weather'])[0]['main']) == 'Clouds':
+        weather_icon.set_img_src("res/clouds.png")
+      if ((weather_results['weather'])[0]['main']) == 'Rain':
+        weather_icon.set_img_src("res/rain.png")
+      if ((weather_results['weather'])[0]['main']) == 'Drizzle':
+        weather_icon.set_img_src("res/drizzle.png")
+      if ((weather_results['weather'])[0]['main']) == 'Thunderstorm':
+        weather_icon.set_img_src("res/thunderstorm.png")
+      if ((weather_results['weather'])[0]['main']) == 'Snow':
+        weather_icon.set_img_src("res/Snow.png")
+      if ((weather_results['weather'])[0]['main']) == 'Atmosphere':
+        weather_icon.set_img_src("res/Atmosphere.png")
+    else:
+      description.set_hidden(True)
+    gc.collect()
+    req.close()
+  except:
+    pass
+
+# Describe this function...
+def getForecastWeather():
+  global payload, weather_results, forecast_results, forecast_0, temp_out, hum_out, press_out, datetime, timetime, indoor_temp, weather_out, indoor_humidity, forecast_1, forecast_2, forecast_3, forecast_4, forecast_5
+  try:
+    req = urequests.request(method='GET', url='https://api.openweathermap.org/data/2.5/forecast?lat=46.516&&lon=6.63282&cnt=40&appid=7095a73973c7773e2f0819c63c7befe6&units=metric', headers={})
+    forecast_results = json.loads((req.text))
+    forecast_0 = (forecast_results['list'])[0]
+    if ((forecast_0['weather'])[0]['main']) == 'Clear':
+      f0.set_img_src("res/sun_small.png")
+    if ((forecast_0['weather'])[0]['main']) == 'Clouds':
+      f0.set_img_src("res/clouds_small.png")
+    if ((forecast_0['weather'])[0]['main']) == 'Rain':
+      f0.set_img_src("res/rain_small.png")
+    if ((forecast_0['weather'])[0]['main']) == 'Drizzle':
+      f0.set_img_src("res/drizzle_small.png")
+    if ((forecast_0['weather'])[0]['main']) == 'Thunderstorm':
+      f0.set_img_src("res/thunderstorm_small.png")
+    if ((forecast_0['weather'])[0]['main']) == 'Snow':
+      f0.set_img_src("res/snow_small.png")
+    if ((forecast_0['weather'])[0]['main']) == 'Atmosphere':
+      f0.set_img_src("res/atmosphere_small.png")
+    forecast_1 = (forecast_results['list'])[7]
+    if ((forecast_1['weather'])[0]['main']) == 'Clear':
+      f1.set_img_src("res/sun_small.png")
+    if ((forecast_1['weather'])[0]['main']) == 'Clouds':
+      f1.set_img_src("res/clouds_small.png")
+    if ((forecast_1['weather'])[0]['main']) == 'Rain':
+      f1.set_img_src("res/rain_small.png")
+    if ((forecast_1['weather'])[0]['main']) == 'Drizzle':
+      f1.set_img_src("res/drizzle_small.png")
+    if ((forecast_1['weather'])[0]['main']) == 'Thunderstorm':
+      f1.set_img_src("res/thunderstorm_small.png")
+    if ((forecast_1['weather'])[0]['main']) == 'Snow':
+      f1.set_img_src("res/snow_small.png")
+    if ((forecast_1['weather'])[0]['main']) == 'Atmosphere':
+      f1.set_img_src("res/atmosphere_small.png")
+    forecast_2 = (forecast_results['list'])[15]
+    if ((forecast_2['weather'])[0]['main']) == 'Clear':
+      f2.set_img_src("res/sun_small.png")
+    if ((forecast_2['weather'])[0]['main']) == 'Clouds':
+      f2.set_img_src("res/clouds_small.png")
+    if ((forecast_2['weather'])[0]['main']) == 'Rain':
+      f2.set_img_src("res/rain_small.png")
+    if ((forecast_2['weather'])[0]['main']) == 'Drizzle':
+      f2.set_img_src("res/drizzle_small.png")
+    if ((forecast_2['weather'])[0]['main']) == 'Thunderstorm':
+      f2.set_img_src("res/thunderstorm_small.png")
+    if ((forecast_2['weather'])[0]['main']) == 'Snow':
+      f2.set_img_src("res/snow_small.png")
+    if ((forecast_2['weather'])[0]['main']) == 'Atmosphere':
+      f2.set_img_src("res/atmosphere_small.png")
+    forecast_3 = (forecast_results['list'])[23]
+    if ((forecast_3['weather'])[0]['main']) == 'Clear':
+      f3.set_img_src("res/sun_small.png")
+    if ((forecast_3['weather'])[0]['main']) == 'Clouds':
+      f3.set_img_src("res/clouds_small.png")
+    if ((forecast_3['weather'])[0]['main']) == 'Rain':
+      f3.set_img_src("res/rain_small.png")
+    if ((forecast_3['weather'])[0]['main']) == 'Drizzle':
+      f3.set_img_src("res/drizzle_small.png")
+    if ((forecast_3['weather'])[0]['main']) == 'Thunderstorm':
+      f3.set_img_src("res/thunderstorm_small.png")
+    if ((forecast_3['weather'])[0]['main']) == 'Snow':
+      f3.set_img_src("res/snow_small.png")
+    if ((forecast_3['weather'])[0]['main']) == 'Atmosphere':
+      f3.set_img_src("res/atmosphere_small.png")
+    forecast_4 = (forecast_results['list'])[31]
+    if ((forecast_4['weather'])[0]['main']) == 'Clear':
+      f4.set_img_src("res/sun_small.png")
+    if ((forecast_4['weather'])[0]['main']) == 'Clouds':
+      f4.set_img_src("res/clouds_small.png")
+    if ((forecast_4['weather'])[0]['main']) == 'Rain':
+      f4.set_img_src("res/rain_small.png")
+    if ((forecast_4['weather'])[0]['main']) == 'Drizzle':
+      f4.set_img_src("res/drizzle_small.png")
+    if ((forecast_4['weather'])[0]['main']) == 'Thunderstorm':
+      f4.set_img_src("res/thunderstorm_small.png")
+    if ((forecast_4['weather'])[0]['main']) == 'Snow':
+      f4.set_img_src("res/snow_small.png")
+    if ((forecast_4['weather'])[0]['main']) == 'Atmosphere':
+      f4.set_img_src("res/atmosphere_small.png")
+    forecast_5 = (forecast_results['list'])[39]
+    if ((forecast_5['weather'])[0]['main']) == 'Clear':
+      f5.set_img_src("res/sun_small.png")
+    if ((forecast_5['weather'])[0]['main']) == 'Clouds':
+      f5.set_img_src("res/clouds_small.png")
+    if ((forecast_5['weather'])[0]['main']) == 'Rain':
+      f5.set_img_src("res/rain_small.png")
+    if ((forecast_5['weather'])[0]['main']) == 'Drizzle':
+      f5.set_img_src("res/drizzle_small.png")
+    if ((forecast_5['weather'])[0]['main']) == 'Thunderstorm':
+      f5.set_img_src("res/thunderstorm_small.png")
+    if ((forecast_5['weather'])[0]['main']) == 'Snow':
+      f5.set_img_src("res/snow_small.png")
+    if ((forecast_5['weather'])[0]['main']) == 'Atmosphere':
+      f5.set_img_src("res/atmosphere_small.png")
+    gc.collect()
+    req.close()
+  except:
+    pass
+
+
+
+
+def buttonA_wasPressed():
+  global payload, weather_results, forecast_results, forecast_0, temp_out, hum_out, press_out, datetime, timetime, indoor_temp, weather_out, indoor_humidity, forecast_1, forecast_2, forecast_3, forecast_4, forecast_5
+  f0.set_hidden(True)
+  f1.set_hidden(True)
+  f2.set_hidden(True)
+  f3.set_hidden(True)
+  f4.set_hidden(True)
+  f5.set_hidden(True)
+  f0_date.set_hidden(True)
+  f1_date.set_hidden(True)
+  f2_date.set_hidden(True)
+  f3_date.set_hidden(True)
+  f4_date.set_hidden(True)
+  f5_date.set_hidden(True)
+  temp.set_hidden(False)
+  celsius.set_hidden(False)
+  deg.set_hidden(False)
+  hum.set_hidden(False)
+  pourc.set_hidden(False)
+  pressure.set_hidden(False)
+  pa.set_hidden(False)
+  location.set_hidden(False)
+  description.set_hidden(False)
+  mode.set_text('IN')
+  weather_icon.set_hidden(False)
+  weather_icon.set_img_src("res/home.png")
+  rgb.setColorAll(0xff9900)
+  temp.set_text(str(round(env3_0.temperature)))
+  indoor_temp = round(env3_0.temperature)
+  hum.set_text(str(round(env3_0.humidity)))
+  indoor_humidity = round(env3_0.humidity)
+  pressure.set_text(str(round(env3_0.pressure)))
+  indoor_air_quality = tvoc_0.TVOC
+  
+  location.set_text('Home')
+  if indoor_air_quality <=50:
+    description.set_text('Excellent air quality')
+  elif 100 > indoor_air_quality > 51:
+    description.set_text('Good air quality')
+  elif 150 > indoor_air_quality > 101:
+    description.set_text('Moderate air quality')
+  elif 200 > indoor_air_quality > 151:
+    description.set_text('Bad air quality')
+  elif 250 > indoor_air_quality > 201:
+    description.set_text('Very bad air quality')
+  else:
+    description.set_text('You are going to die')    
+
+
+  wait(0.5)
+  payload = {'temperature':indoor_temp,'humidity':indoor_humidity}
+  pass
+btnA.wasPressed(buttonA_wasPressed)
+
+def buttonB_wasPressed():
+  global payload, weather_results, forecast_results, forecast_0, temp_out, hum_out, press_out, datetime, timetime, indoor_temp, weather_out, indoor_humidity, forecast_1, forecast_2, forecast_3, forecast_4, forecast_5
+  f0.set_hidden(True)
+  f1.set_hidden(True)
+  f2.set_hidden(True)
+  f3.set_hidden(True)
+  f4.set_hidden(True)
+  f5.set_hidden(True)
+  f0_date.set_hidden(True)
+  f1_date.set_hidden(True)
+  f2_date.set_hidden(True)
+  f3_date.set_hidden(True)
+  f4_date.set_hidden(True)
+  f5_date.set_hidden(True)
+  temp.set_hidden(False)
+  celsius.set_hidden(False)
+  deg.set_hidden(False)
+  hum.set_hidden(False)
+  pourc.set_hidden(False)
+  pressure.set_hidden(False)
+  pa.set_hidden(False)
+  location.set_hidden(False)
+  description.set_hidden(False)
+  weather_icon.set_hidden(False)
+  rgb.setColorAll(0xff9900)
+  getCurrentWeather()
+  mode.set_text('OUT')
+  temp.set_text(str(str(round(temp_out))))
+  hum.set_text(str(str(round(hum_out))))
+  pressure.set_text(str(str(round(press_out))))
+  rgb.setColorAll(0x33ff33)
+  wait(3)
+  rgb.setColorAll(0x000000)
+  pass
+btnB.wasPressed(buttonB_wasPressed)
+
+def buttonC_wasPressed():
+  global payload, weather_results, forecast_results, forecast_0, temp_out, hum_out, press_out, datetime, timetime, indoor_temp, weather_out, indoor_humidity, forecast_1, forecast_2, forecast_3, forecast_4, forecast_5
+  temp.set_hidden(True)
+  celsius.set_hidden(True)
+  deg.set_hidden(True)
+  hum.set_hidden(True)
+  pourc.set_hidden(True)
+  pressure.set_hidden(True)
+  pa.set_hidden(True)
+  location.set_hidden(True)
+  description.set_hidden(True)
+  weather_icon.set_hidden(True)
+  f0.set_hidden(False)
+  f1.set_hidden(False)
+  f2.set_hidden(False)
+  f3.set_hidden(False)
+  f4.set_hidden(False)
+  f5.set_hidden(False)
+  rgb.setColorAll(0xff9900)
+  getForecastWeather()
+  mode.set_text('PRED')
+  f0_date.set_hidden(False)
+  f0_date.set_text('today')
+  f1_date.set_hidden(False)
+  f1_date.set_text('tomorrow')
+  f2_date.set_hidden(False)
+  f2_date.set_text(str((forecast_2['dt_txt'])[ : 10]))
+  f3_date.set_hidden(False)
+  f3_date.set_text(str((forecast_3['dt_txt'])[ : 10]))
+  f4_date.set_hidden(False)
+  f4_date.set_text(str((forecast_4['dt_txt'])[ : 10]))
+  f5_date.set_hidden(False)
+  f5_date.set_text(str((forecast_5['dt_txt'])[ : 10]))
+  rgb.setColorAll(0x33ff33)
+  wait(3)
+  rgb.setColorAll(0x000000)
+  pass
+btnC.wasPressed(buttonC_wasPressed)
+
+
+f0.set_hidden(True)
+f1.set_hidden(True)
+f2.set_hidden(True)
+f3.set_hidden(True)
+f4.set_hidden(True)
+f5.set_hidden(True)
+f0_date.set_hidden(True)
+f1_date.set_hidden(True)
+f2_date.set_hidden(True)
+f3_date.set_hidden(True)
+f4_date.set_hidden(True)
+f5_date.set_hidden(True)
+
+ntp = ntptime.client(host='de.pool.ntp.org', timezone=2)
+date.set_text(str(ntp.formatDate('-')))
+time.set_text(str(ntp.formatTime(':')))
+
+weather_results = ''
+getCurrentWeather()
+mode.set_text('OUT')
+temp.set_text(str(str(round(temp_out))))
+hum.set_text(str(str(round(hum_out))))
+pressure.set_text(str(str(round(press_out))))
+
+def send_data():
+    temp = env3_0.temperature
+    hum  = env3_0.humidity
+    tvoc  = tvoc_0.TVOC
+    
+    payload = {
+        "temperature": temp,
+        "humidity":    hum,
+        "tvoc":        tvoc
+    }
+  
+    try:
+        resp = urequests.post(SERVER_URL, json=payload)
+        resp.close()
+    except:
+        # si échec, on passe simplement à la suite
+        pass
+    
+def generate_and_download_audio():
+  try:
+      # Étape 1 : demande la génération de l'audio
+      resp = urequests.get(AUDIO_TRIGGER_URL)
+      if resp.status_code != 200:
+          print("Erreur lors de la génération audio :", resp.text)
+          resp.close()
+          return
+      resp.close()
+
+      # Étape 2 : télécharge le fichier audio généré
+      audio_response = urequests.get(AUDIO_DOWNLOAD_URL)
+      if audio_response.status_code == 200:
+          with open(AUDIO_FILE_PATH, "wb") as f:
+              f.write(audio_response.content)
+          print("✅ Audio téléchargé avec succès")
+      else:
+          print("Erreur lors du téléchargement audio :", audio_response.status_code)
+      audio_response.close()
+
+  except Exception as e:
+      print("Exception audio :", e)
+
+    
+while True:
+  
+  if counter >= 900000:
+    send_data()
+    counter = 0
+    
+    
+  if counter_2 >= 900000 and (pir_0.state)==1:
+   generate_and_download_audio()
+   speaker.playWAV('/flash/announcement.wav', volume=5)
+   counter_2 = 0
+    
+    
+  time.set_text(str(counter_2))
+  
+  
+  if (pir_0.state) == 1:
+    rgb.setColorFrom(6, 10, 0xff0000)
+    rgb.setColorFrom(1, 5, 0x000099)
+  else:
+    rgb.setColorFrom(6, 10, 0x000000)
+    rgb.setColorFrom(1, 5, 0x000000)
+  
+  counter += 1
+  counter_2 += 1
+  wait_ms(2)
