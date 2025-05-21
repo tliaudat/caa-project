@@ -19,9 +19,9 @@ env3_0 = unit.get(unit.ENV3, unit.PORTA)
 pir_0 = unit.get(unit.PIR, unit.PORTB)
 tvoc_0 = unit.get(unit.TVOC, unit.PORTC)
 
-SERVER_URL = 'http://192.168.1.123:8080/upload'
-AUDIO_TRIGGER_URL = 'http://192.168.1.123:8080/announce'
-AUDIO_DOWNLOAD_URL = 'http://192.168.1.123:8080/audio'
+SERVER_URL = 'http://192.168.1.117:8080/upload'
+AUDIO_TRIGGER_URL = 'http://192.168.1.117:8080/announce'
+AUDIO_DOWNLOAD_URL = 'http://192.168.1.117:8080/audio'
 AUDIO_FILE_PATH = '/flash/announcement.wav'
 counter = 0
 counter_2 = 0
@@ -106,15 +106,15 @@ def getCurrentWeather():
       weather_out = (weather_results['weather'])[0]['description']
       description.set_hidden(False)
       if ((weather_results['weather'])[0]['main']) == 'Clear':
-        weather_icon.set_img_src("res/sun.png")
+        weather_icon.set_img_src("res/Clear.png")
       if ((weather_results['weather'])[0]['main']) == 'Clouds':
-        weather_icon.set_img_src("res/clouds.png")
+        weather_icon.set_img_src("res/Clouds.png")
       if ((weather_results['weather'])[0]['main']) == 'Rain':
-        weather_icon.set_img_src("res/rain.png")
+        weather_icon.set_img_src("res/Rain.png")
       if ((weather_results['weather'])[0]['main']) == 'Drizzle':
-        weather_icon.set_img_src("res/drizzle.png")
+        weather_icon.set_img_src("res/Drizzle.png")
       if ((weather_results['weather'])[0]['main']) == 'Thunderstorm':
-        weather_icon.set_img_src("res/thunderstorm.png")
+        weather_icon.set_img_src("res/Thunderstorm.png")
       if ((weather_results['weather'])[0]['main']) == 'Snow':
         weather_icon.set_img_src("res/Snow.png")
       if ((weather_results['weather'])[0]['main']) == 'Atmosphere':
@@ -255,7 +255,7 @@ def buttonA_wasPressed():
   description.set_hidden(False)
   mode.set_text('IN')
   weather_icon.set_hidden(False)
-  weather_icon.set_img_src("res/home.png")
+  weather_icon.set_img_src("res/house.png")
   rgb.setColorAll(0xff9900)
   temp.set_text(str(round(env3_0.temperature)))
   indoor_temp = round(env3_0.temperature)
@@ -433,7 +433,7 @@ while True:
     counter = 0
     
     
-  if counter_2 >= 900000 and (pir_0.state)==1:
+  if counter_2 >= 500 and (pir_0.state)==1:
    generate_and_download_audio()
    speaker.playWAV('/flash/announcement.wav', volume=5)
    counter_2 = 0
