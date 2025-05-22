@@ -183,38 +183,39 @@ with tab1:
                     wind_speed = str(weather_data['wind_speed'])
                     clouds = str(weather_data['clouds'])
                     
-                    st.markdown(f"""
+                    weather_html = f"""
                     <div class="weather-card">
-                        <div class="condition-header">Outdoor Weather</div>
-                        <div class="weather-icon">{weather_icon}</div>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{temp}°C</div>
-                                <div style="font-size: 0.9em; color: #666;">Temperature</div>
+                        <div class="condition-header">🌤️ Outdoor Weather {weather_icon}</div>
+                        <br>
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+                            <div style="text-align: center; min-width: 80px;">
+                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['temperature']:.1f}°C</div>
+                                <div style="font-size: 0.8em; color: #666;">Temperature</div>
                             </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{humidity}%</div>
-                                <div style="font-size: 0.9em; color: #666;">Humidity</div>
+                            <div style="text-align: center; min-width: 80px;">
+                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['humidity']}%</div>
+                                <div style="font-size: 0.8em; color: #666;">Humidity</div>
                             </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{pressure} hPa</div>
-                                <div style="font-size: 0.9em; color: #666;">Pressure</div>
+                            <div style="text-align: center; min-width: 80px;">
+                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['pressure']} hPa</div>
+                                <div style="font-size: 0.8em; color: #666;">Pressure</div>
                             </div>
                         </div>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{wind_speed} m/s</div>
-                                <div style="font-size: 0.9em; color: #666;">Wind Speed</div>
+                        <br>
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
+                            <div style="text-align: center; min-width: 80px;">
+                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['wind_speed']} m/s</div>
+                                <div style="font-size: 0.8em; color: #666;">Wind Speed</div>
                             </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{clouds}%</div>
-                                <div style="font-size: 0.9em; color: #666;">Cloud Cover</div>
+                            <div style="text-align: center; min-width: 80px;">
+                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['clouds']}%</div>
+                                <div style="font-size: 0.8em; color: #666;">Cloud Cover</div>
                             </div>
                         </div>
                     </div>
-                    """, unsafe_allow_html=True)
+                    """
+                    
+                    st.markdown(weather_html, unsafe_allow_html=True)
                     
                 else:
                     st.markdown("""
