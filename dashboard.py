@@ -177,39 +177,35 @@ with tab1:
                     }
                     
                     weather_icon = weather_icons.get(weather_data['weather'], "🌤️")
-                    temp = f"{weather_data['temperature']:.1f}"
-                    humidity = str(weather_data['humidity'])
-                    pressure = str(weather_data['pressure'])
-                    wind_speed = str(weather_data['wind_speed'])
-                    clouds = str(weather_data['clouds'])
                     
+                    # Create the complete HTML block
                     weather_html = f"""
                     <div class="weather-card">
-                        <div class="condition-header">🌤️ Outdoor Weather {weather_icon}</div>
-                        <br>
-                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
-                            <div style="text-align: center; min-width: 80px;">
-                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['temperature']:.1f}°C</div>
-                                <div style="font-size: 0.8em; color: #666;">Temperature</div>
+                        <div class="condition-header">🌤️ Outdoor Weather</div>
+                        <div style="text-align: center; font-size: 4em; margin: 20px 0;">{weather_icon}</div>
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
+                            <div style="text-align: center; min-width: 90px;">
+                                <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['temperature']:.1f}°C</div>
+                                <div style="font-size: 1em; color: black;">Temperature</div>
                             </div>
-                            <div style="text-align: center; min-width: 80px;">
-                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['humidity']}%</div>
-                                <div style="font-size: 0.8em; color: #666;">Humidity</div>
+                            <div style="text-align: center; min-width: 90px;">
+                                <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['humidity']}%</div>
+                                <div style="font-size: 1em; color: black;">Humidity</div>
                             </div>
-                            <div style="text-align: center; min-width: 80px;">
-                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['pressure']} hPa</div>
-                                <div style="font-size: 0.8em; color: #666;">Pressure</div>
+                            <div style="text-align: center; min-width: 90px;">
+                                <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['pressure']} hPa</div>
+                                <div style="font-size: 1em; color: black;">Pressure</div>
                             </div>
                         </div>
                         <br>
-                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px;">
-                            <div style="text-align: center; min-width: 80px;">
-                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['wind_speed']} m/s</div>
-                                <div style="font-size: 0.8em; color: #666;">Wind Speed</div>
+                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
+                            <div style="text-align: center; min-width: 90px;">
+                                <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['wind_speed']} m/s</div>
+                                <div style="font-size: 1em; color: black;">Wind Speed</div>
                             </div>
-                            <div style="text-align: center; min-width: 80px;">
-                                <div style="font-size: 1.2em; font-weight: bold; color: #1f77b4;">{weather_data['clouds']}%</div>
-                                <div style="font-size: 0.8em; color: #666;">Cloud Cover</div>
+                            <div style="text-align: center; min-width: 90px;">
+                                <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['clouds']}%</div>
+                                <div style="font-size: 1em; color: black;">Cloud Cover</div>
                             </div>
                         </div>
                     </div>
@@ -220,20 +216,18 @@ with tab1:
                 else:
                     st.markdown("""
                     <div class="weather-card">
-                        <div class="condition-header">Outdoor Weather</div>
+                        <div class="condition-header">🌤️ Outdoor Weather</div>
                         <div style="color: #ff4b4b; margin-top: 20px;">❌ Unable to fetch weather data</div>
                     </div>
                     """, unsafe_allow_html=True)
                     
             except Exception as e:
-                error_msg = str(e)
                 st.markdown(f"""
                 <div class="weather-card">
-                    <div class="condition-header">Outdoor Weather</div>
-                    <div style="color: #ff4b4b; margin-top: 20px;">❌ Error fetching weather data: {error_msg}</div>
+                    <div class="condition-header">🌤️ Outdoor Weather</div>
+                    <div style="color: #ff4b4b; margin-top: 20px;">❌ Error fetching weather data: {str(e)}</div>
                 </div>
                 """, unsafe_allow_html=True)
-
 
         
         with col2:
