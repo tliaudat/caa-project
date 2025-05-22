@@ -121,7 +121,6 @@ class DataFetcher:
         return self._get_last_sensor_data_cached(self.api_base_url, device_id, self.headers)
     
     @staticmethod
-   
     def _get_last_sensor_data_cached(api_base_url: str, device_id: str, headers: Dict) -> Optional[Dict[str, Any]]:
         """Cached version of get_last_sensor_data"""
         try:
@@ -163,7 +162,6 @@ class DataFetcher:
         return self._get_sensor_history_cached(self.api_base_url, device_id, hours, self.headers)
     
     @staticmethod
-    
     def _get_sensor_history_cached(api_base_url: str, device_id: str, hours: int, headers: Dict) -> Optional[List[Dict[str, Any]]]:
         """Cached version of get_sensor_history"""
         try:
@@ -183,7 +181,6 @@ class DataFetcher:
         return self._get_weather_history_cached(self.api_base_url, location, hours, self.headers)
     
     @staticmethod
-   
     def _get_weather_history_cached(api_base_url: str, location: str, hours: int, headers: Dict) -> Optional[List[Dict[str, Any]]]:
         """Cached version of get_weather_history"""
         try:
@@ -203,7 +200,6 @@ class DataFetcher:
         return self._get_alerts_history_cached(self.api_base_url, device_id, days, self.headers)
     
     @staticmethod
-
     def _get_alerts_history_cached(api_base_url: str, device_id: str, days: int, headers: Dict) -> Optional[List[Dict[str, Any]]]:
         """Cached version of get_alerts_history"""
         try:
