@@ -181,8 +181,8 @@ with tab1:
                     # Create the complete HTML block
                     weather_html = f"""
                     <div class="weather-card">
-                        <div class="condition-header">🌤️ Outdoor Weather</div>
-                        <div style="text-align: center; font-size: 4em; margin: 20px 0;">{weather_icon}</div>
+                        <div class="condition-header">Outdoor Weather</div>
+                        <div style="text-align: center; font-size: 10em; margin: 20px 0;">{weather_icon}</div>
                         <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
                             <div style="text-align: center; min-width: 90px;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['temperature']:.1f}°C</div>
@@ -216,7 +216,7 @@ with tab1:
                 else:
                     st.markdown("""
                     <div class="weather-card">
-                        <div class="condition-header">🌤️ Outdoor Weather</div>
+                        <div class="condition-header">Outdoor Weather</div>
                         <div style="color: #ff4b4b; margin-top: 20px;">❌ Unable to fetch weather data</div>
                     </div>
                     """, unsafe_allow_html=True)
@@ -224,55 +224,57 @@ with tab1:
             except Exception as e:
                 st.markdown(f"""
                 <div class="weather-card">
-                    <div class="condition-header">🌤️ Outdoor Weather</div>
+                    <div class="condition-header">Outdoor Weather</div>
                     <div style="color: #ff4b4b; margin-top: 20px;">❌ Error fetching weather data: {str(e)}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
-        
+
         with col2:
             # Indoor conditions with data in same block as title
             sensor_data = fetch_last_reading()
             if sensor_data:
-                # Check humidity and prepare warning
-                humidity_warning = ""
+                # Create warning if needed
+                warning_html = ""
                 if sensor_data['humidity'] < 40:
-                    humidity_warning = '<div style="color: #ff6b35; font-size: 0.9em; margin-top: 10px; padding: 10px; background-color: #fff3cd; border-radius: 5px;">⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.</div>'
+                    warning_html = """
+                    <div style="color: #ff6b35; font-size: 0.9em; padding: 8px; background-color: #fff3cd; border-radius: 5px; margin: 10px 0;">
+                        ⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.
+                    </div>
+                    """
                 
-                # Prepare values
-                indoor_temp = f"{sensor_data['temperature']:.1f}"
-                indoor_humidity = str(sensor_data['humidity'])
-                tvoc_value = f"{sensor_data['tvoc']:.1f}"
-                
-                st.markdown(f"""
+                # Create the complete HTML block
+                indoor_html = f"""
                 <div class="weather-card">
                     <div class="condition-header">Indoor Conditions</div>
-                    <div class="weather-icon">🏠</div>
-                    {humidity_warning}
-                    
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{indoor_temp}°C</div>
-                            <div style="font-size: 0.9em; color: #666;">Temperature</div>
+                    <div style="text-align: center; font-size: 10em; margin: 20px 0;">🏠</div>
+                    {warning_html}
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
+                        <div style="text-align: center; min-width: 90px;">
+                            <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['temperature']:.1f}°C</div>
+                            <div style="font-size: 1em; color: black;">Temperature</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{indoor_humidity}%</div>
-                            <div style="font-size: 0.9em; color: #666;">Humidity</div>
+                        <div style="text-align: center; min-width: 90px;">
+                            <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['humidity']}%</div>
+                            <div style="font-size: 1em; color: black;">Humidity</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{tvoc_value}</div>
-                            <div style="font-size: 0.9em; color: #666;">TVOC</div>
+                        <div style="text-align: center; min-width: 90px;">
+                            <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['tvoc']:.1f}</div>
+                            <div style="font-size: 1em; color: black;">TVOC</div>
                         </div>
                     </div>
                 </div>
-                """, unsafe_allow_html=True)
+                """
+                
+                st.markdown(indoor_html, unsafe_allow_html=True)
                     
             else:
                 st.markdown("""
                 <div class="weather-card">
-                    <div class="condition-header">Indoor Conditions</div>
-                    <div class="weather-icon">🏠</div>
-                    <div style="color: #ff6b35; margin-top: 20px; padding: 10px; background-color: #fff3cd; border-radius: 5px;">⚠️ No indoor sensor data available</div>
+                    <div class="condition-header">🏠 Indoor Conditions</div>
+                    <div style="color: #ff6b35; margin-top: 20px; padding: 10px; background-color: #fff3cd; border-radius: 5px;">
+                        ⚠️ No indoor sensor data available
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
 
