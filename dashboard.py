@@ -182,7 +182,7 @@ with tab1:
                     <div class="weather-card">
                         <div class="condition-header">Outdoor Weather</div>
                         <div style="text-align: center; font-size: 10em; margin: 20px 0;">{weather_icon}</div>
-                        <div style="text-align: center; font-size: 1em; color: grey;">{weather_data['description']</div>
+                        <div style="text-align: center; font-size: 1em; color: grey;">{weather_data['description']}</div>
                         <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
                             <div style="text-align: center; min-width: 90px;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['temperature']:.1f}°C</div>
