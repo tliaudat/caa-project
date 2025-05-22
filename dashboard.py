@@ -160,12 +160,7 @@ with tab1:
         col1, col2 = st.columns(2, gap="large")
         
         with col1:
-            # Outdoor weather card
-            st.markdown("""
-            <div class="weather-card">
-                <div class="condition-header"> Outdoor Weather</div>
-            """, unsafe_allow_html=True)
-            
+            # Outdoor weather card with data in same block as title
             try:
                 weather_data = data_fetcher.get_current_weather(location)
                 if weather_data:
@@ -182,8 +177,12 @@ with tab1:
                     }
                     
                     weather_icon = weather_icons.get(weather_data['weather'], "🌤️")
+                    
                     st.markdown(f"""
-                    <div class="weather-icon">{weather_icon}</div>
+                    <div class="weather-card">
+                        <div class="condition-header">🌤️ Outdoor Weather</div>
+                        <div class="weather-icon">{weather_icon}</div>
+                    </div>
                     """, unsafe_allow_html=True)
                     
                     # All metrics with uniform style
@@ -203,28 +202,38 @@ with tab1:
                     with metrics_row2[1]:
                         st.metric("Cloud Cover", f"{weather_data['clouds']}%")
                     
-                    
-                    
                 else:
+                    st.markdown("""
+                    <div class="weather-card">
+                        <div class="condition-header">🌤️ Outdoor Weather</div>
+                    </div>
+                    """, unsafe_allow_html=True)
                     st.error("❌ Unable to fetch weather data")
+                    
             except Exception as e:
+                st.markdown("""
+                <div class="weather-card">
+                    <div class="condition-header">🌤️ Outdoor Weather</div>
+                </div>
+                """, unsafe_allow_html=True)
                 st.error(f"❌ Error fetching weather data: {str(e)}")
-            
-            st.markdown("</div>", unsafe_allow_html=True)
         
         with col2:
-            st.markdown("""
-            <div class="weather-card">
-            <div class="condition-header">🏠 Indoor Conditions</div>
-            """, unsafe_allow_html=True)
-
-            # Récupération de la dernière mesure intérieure
+            # Indoor conditions with data in same block as title
             sensor_data = fetch_last_reading()
             if sensor_data:
-                # Affichage du warning si humidité < 40%
+                # Display warning if humidity < 40%
+                humidity_warning = ""
                 if sensor_data['humidity'] < 40:
-                    st.warning("⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.")
-
+                    humidity_warning = '<div style="color: #ff6b35; font-size: 0.9em; margin-top: 10px;">⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.</div>'
+                
+                st.markdown(f"""
+                <div class="weather-card">
+                    <div class="condition-header">🏠 Indoor Conditions</div>
+                    {humidity_warning}
+                </div>
+                """, unsafe_allow_html=True)
+                
                 metrics_row1 = st.columns(3)
                 with metrics_row1[0]:
                     st.metric("Temperature", f"{sensor_data['temperature']:.1f}°C")
@@ -233,12 +242,13 @@ with tab1:
                 with metrics_row1[2]:
                     st.metric("TVOC", f"{sensor_data['tvoc']:.1f}")
                     
-                    
             else:
+                st.markdown("""
+                <div class="weather-card">
+                    <div class="condition-header">🏠 Indoor Conditions</div>
+                </div>
+                """, unsafe_allow_html=True)
                 st.warning("⚠️ No indoor sensor data available")
-
-            st.markdown("</div>", unsafe_allow_html=True)
-
 
 
 with tab2:
@@ -364,6 +374,6 @@ with tab3:
 st.markdown("---")
 st.markdown(f"""
 <div style="text-align: center; color: #6c757d; padding: 1rem;">
-    Weather Monitor Dashboard - Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+    Stratos Dashboard - Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 </div>
 """, unsafe_allow_html=True)
