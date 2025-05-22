@@ -180,43 +180,52 @@ with tab1:
                     
                     st.markdown(f"""
                     <div class="weather-card">
-                        <div class="condition-header">🌤️ Outdoor Weather</div>
+                        <div class="condition-header">Outdoor Weather</div>
                         <div class="weather-icon">{weather_icon}</div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['temperature']:.1f}°C</div>
+                                <div style="font-size: 0.9em; color: #666;">Temperature</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['humidity']}%</div>
+                                <div style="font-size: 0.9em; color: #666;">Humidity</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['pressure']} hPa</div>
+                                <div style="font-size: 0.9em; color: #666;">Pressure</div>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['wind_speed']} m/s</div>
+                                <div style="font-size: 0.9em; color: #666;">Wind Speed</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['clouds']}%</div>
+                                <div style="font-size: 0.9em; color: #666;">Cloud Cover</div>
+                            </div>
+                        </div>
                     </div>
                     """, unsafe_allow_html=True)
-                    
-                    # All metrics with uniform style
-                    metrics_row1 = st.columns(3)
-                    with metrics_row1[0]:
-                        st.metric("Temperature", f"{weather_data['temperature']:.1f}°C", 
-                                delta=None, delta_color="normal")
-                    with metrics_row1[1]:
-                        st.metric("Humidity", f"{weather_data['humidity']}%")
-                    with metrics_row1[2]:
-                        st.metric("Pressure", f"{weather_data['pressure']} hPa")
-                    
-                    # Second row of metrics with same style
-                    metrics_row2 = st.columns(3)
-                    with metrics_row2[0]:
-                        st.metric("Wind Speed", f"{weather_data['wind_speed']} m/s")
-                    with metrics_row2[1]:
-                        st.metric("Cloud Cover", f"{weather_data['clouds']}%")
                     
                 else:
                     st.markdown("""
                     <div class="weather-card">
-                        <div class="condition-header">🌤️ Outdoor Weather</div>
+                        <div class="condition-header">Outdoor Weather</div>
+                        <div style="color: #ff4b4b; margin-top: 20px;">❌ Unable to fetch weather data</div>
                     </div>
                     """, unsafe_allow_html=True)
-                    st.error("❌ Unable to fetch weather data")
                     
             except Exception as e:
-                st.markdown("""
+                st.markdown(f"""
                 <div class="weather-card">
-                    <div class="condition-header">🌤️ Outdoor Weather</div>
+                    <div class="condition-header">Outdoor Weather</div>
+                    <div style="color: #ff4b4b; margin-top: 20px;">❌ Error fetching weather data: {str(e)}</div>
                 </div>
                 """, unsafe_allow_html=True)
-                st.error(f"❌ Error fetching weather data: {str(e)}")
         
         with col2:
             # Indoor conditions with data in same block as title
@@ -225,30 +234,39 @@ with tab1:
                 # Display warning if humidity < 40%
                 humidity_warning = ""
                 if sensor_data['humidity'] < 40:
-                    humidity_warning = '<div style="color: #ff6b35; font-size: 0.9em; margin-top: 10px;">⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.</div>'
+                    humidity_warning = '<div style="color: #ff6b35; font-size: 0.9em; margin-top: 10px; padding: 10px; background-color: #fff3cd; border-radius: 5px;">⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.</div>'
                 
                 st.markdown(f"""
                 <div class="weather-card">
-                    <div class="condition-header">🏠 Indoor Conditions</div>
+                    <div class="condition-header">Indoor Conditions</div>
+                    <div class="weather-icon">🏠</div>
                     {humidity_warning}
+                    
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{sensor_data['temperature']:.1f}°C</div>
+                            <div style="font-size: 0.9em; color: #666;">Temperature</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{sensor_data['humidity']}%</div>
+                            <div style="font-size: 0.9em; color: #666;">Humidity</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{sensor_data['tvoc']:.1f}</div>
+                            <div style="font-size: 0.9em; color: #666;">TVOC</div>
+                        </div>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
-                
-                metrics_row1 = st.columns(3)
-                with metrics_row1[0]:
-                    st.metric("Temperature", f"{sensor_data['temperature']:.1f}°C")
-                with metrics_row1[1]:
-                    st.metric("Humidity", f"{sensor_data['humidity']}%")
-                with metrics_row1[2]:
-                    st.metric("TVOC", f"{sensor_data['tvoc']:.1f}")
                     
             else:
                 st.markdown("""
                 <div class="weather-card">
-                    <div class="condition-header">🏠 Indoor Conditions</div>
+                    <div class="condition-header">Indoor Conditions</div>
+                    <div class="weather-icon">🏠</div>
+                    <div style="color: #ff6b35; margin-top: 20px; padding: 10px; background-color: #fff3cd; border-radius: 5px;">⚠️ No indoor sensor data available</div>
                 </div>
                 """, unsafe_allow_html=True)
-                st.warning("⚠️ No indoor sensor data available")
 
 
 with tab2:
