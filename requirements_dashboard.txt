@@ -11,3 +11,4 @@ google-cloud-secret-manager
 # Utilitaires
 python-dotenv==1.0.0
 datetime==5.2
+db-dtypes
