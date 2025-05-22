@@ -23,7 +23,7 @@ TABLE = "data-science-443020.weather_monitor.sensor_readings"
 
 # Fonction pour récupérer la dernière mesure
 @st.cache_data(ttl=0)
-def fetch_last_reading() -> dict | None:
+def fetch_last_reading() -> Union[dict, None]:
     """
     Récupère la dernière ligne de sensor_readings depuis BigQuery.
     """
