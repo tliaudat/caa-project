@@ -5,6 +5,8 @@ import plotly.express as px
 from datetime import datetime
 from utils.data_fetcher import DataFetcher
 from google.cloud import bigquery
+from typing import Union
+
 
 # Page configuration
 st.set_page_config(
