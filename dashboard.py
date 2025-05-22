@@ -177,6 +177,11 @@ with tab1:
                     }
                     
                     weather_icon = weather_icons.get(weather_data['weather'], "🌤️")
+                    temp = f"{weather_data['temperature']:.1f}"
+                    humidity = str(weather_data['humidity'])
+                    pressure = str(weather_data['pressure'])
+                    wind_speed = str(weather_data['wind_speed'])
+                    clouds = str(weather_data['clouds'])
                     
                     st.markdown(f"""
                     <div class="weather-card">
@@ -185,26 +190,26 @@ with tab1:
                         
                         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
                             <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['temperature']:.1f}°C</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{temp}°C</div>
                                 <div style="font-size: 0.9em; color: #666;">Temperature</div>
                             </div>
                             <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['humidity']}%</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{humidity}%</div>
                                 <div style="font-size: 0.9em; color: #666;">Humidity</div>
                             </div>
                             <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['pressure']} hPa</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{pressure} hPa</div>
                                 <div style="font-size: 0.9em; color: #666;">Pressure</div>
                             </div>
                         </div>
                         
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px;">
                             <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['wind_speed']} m/s</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{wind_speed} m/s</div>
                                 <div style="font-size: 0.9em; color: #666;">Wind Speed</div>
                             </div>
                             <div style="text-align: center;">
-                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{weather_data['clouds']}%</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{clouds}%</div>
                                 <div style="font-size: 0.9em; color: #666;">Cloud Cover</div>
                             </div>
                         </div>
@@ -220,21 +225,29 @@ with tab1:
                     """, unsafe_allow_html=True)
                     
             except Exception as e:
+                error_msg = str(e)
                 st.markdown(f"""
                 <div class="weather-card">
                     <div class="condition-header">Outdoor Weather</div>
-                    <div style="color: #ff4b4b; margin-top: 20px;">❌ Error fetching weather data: {str(e)}</div>
+                    <div style="color: #ff4b4b; margin-top: 20px;">❌ Error fetching weather data: {error_msg}</div>
                 </div>
                 """, unsafe_allow_html=True)
+
+
         
         with col2:
             # Indoor conditions with data in same block as title
             sensor_data = fetch_last_reading()
             if sensor_data:
-                # Display warning if humidity < 40%
+                # Check humidity and prepare warning
                 humidity_warning = ""
                 if sensor_data['humidity'] < 40:
                     humidity_warning = '<div style="color: #ff6b35; font-size: 0.9em; margin-top: 10px; padding: 10px; background-color: #fff3cd; border-radius: 5px;">⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.</div>'
+                
+                # Prepare values
+                indoor_temp = f"{sensor_data['temperature']:.1f}"
+                indoor_humidity = str(sensor_data['humidity'])
+                tvoc_value = f"{sensor_data['tvoc']:.1f}"
                 
                 st.markdown(f"""
                 <div class="weather-card">
@@ -244,15 +257,15 @@ with tab1:
                     
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
                         <div style="text-align: center;">
-                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{sensor_data['temperature']:.1f}°C</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{indoor_temp}°C</div>
                             <div style="font-size: 0.9em; color: #666;">Temperature</div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{sensor_data['humidity']}%</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{indoor_humidity}%</div>
                             <div style="font-size: 0.9em; color: #666;">Humidity</div>
                         </div>
                         <div style="text-align: center;">
-                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{sensor_data['tvoc']:.1f}</div>
+                            <div style="font-size: 1.5em; font-weight: bold; color: #1f77b4;">{tvoc_value}</div>
                             <div style="font-size: 0.9em; color: #666;">TVOC</div>
                         </div>
                     </div>
