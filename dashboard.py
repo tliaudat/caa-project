@@ -178,7 +178,6 @@ with tab1:
                     
                     weather_icon = weather_icons.get(weather_data['weather'], "🌤️")
                     
-                    # Create the complete HTML block
                     weather_html = f"""
                     <div class="weather-card">
                         <div class="condition-header">Outdoor Weather</div>
@@ -243,7 +242,6 @@ with tab1:
                     </div>
                     """
                 
-                # Create the complete HTML block
                 indoor_html = f"""
                 <div class="weather-card">
                     <div class="condition-header">Indoor Conditions</div>
@@ -271,7 +269,7 @@ with tab1:
             else:
                 st.markdown("""
                 <div class="weather-card">
-                    <div class="condition-header">🏠 Indoor Conditions</div>
+                    <div class="condition-header">Indoor Conditions</div>
                     <div style="color: #ff6b35; margin-top: 20px; padding: 10px; background-color: #fff3cd; border-radius: 5px;">
                         ⚠️ No indoor sensor data available
                     </div>
