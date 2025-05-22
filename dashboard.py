@@ -242,6 +242,27 @@ with tab1:
                         ⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.
                     </div>
                     """
+                # Get air quality description based on TVOC value
+                tvoc_value = sensor_data['tvoc']
+                if tvoc_value <= 50:
+                    air_quality_desc = 'Excellent air quality'
+                    air_quality_color = '#28a745'  # Green
+                elif 51 < tvoc_value < 100:
+                    air_quality_desc = 'Good air quality'
+                    air_quality_color = '#6f9e04'  # Light green
+                elif 101 < tvoc_value < 150:
+                    air_quality_desc = 'Moderate air quality'
+                    air_quality_color = '#ffc107'  # Yellow
+                elif 151 < tvoc_value < 200:
+                    air_quality_desc = 'Bad air quality'
+                    air_quality_color = '#fd7e14'  # Orange
+                elif 201 < tvoc_value < 250:
+                    air_quality_desc = 'Very bad air quality'
+                    air_quality_color = '#dc3545'  # Red
+                else:
+                    air_quality_desc = 'You are going to die'
+                    air_quality_color = '#6f42c1'  # Purple
+
                 
                 indoor_html = f"""
                 <div class="weather-card">
@@ -259,8 +280,11 @@ with tab1:
                         </div>
                         <div style="text-align: center; min-width: 90px;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['tvoc']:.1f}</div>
-                            <div style="font-size: 1em; color: black;">Pressure</div>
+                            <div style="font-size: 1em; color: black;">TVOC</div>
                         </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 5px;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: {air_quality_color};">{air_quality_desc}</div>
                     </div>
                 </div>
                 """
