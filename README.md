@@ -1,5 +1,5 @@
 
-![logoGITHUB](images/logoSTRATOS.png)
+![logoGITHUB](images/stratos.png)
 
 
 # Stratos Smart Weather Monitor
