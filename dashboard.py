@@ -181,8 +181,8 @@ with tab1:
                     weather_html = f"""
                     <div class="weather-card">
                         <div class="condition-header">Outdoor Weather</div>
-                        <div style="text-align: center; font-size: 10em; margin: 20px 0;">{weather_icon}</div>
-                        <div style="text-align: center; font-size: 1em; color: grey;">{weather_data['description']}</div>
+                        <div style="text-align: center; font-size: 10em;">{weather_icon}</div>
+                        <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">{weather_data['description']}</div>
                         <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
                             <div style="text-align: center; min-width: 90px;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['temperature']:.1f}°C</div>
@@ -246,8 +246,8 @@ with tab1:
                 indoor_html = f"""
                 <div class="weather-card">
                     <div class="condition-header">Indoor Weather</div>
-                    <div style="text-align: center; font-size: 10em; margin: 20px 0;">🏠</div>
-                    <div style="text-align: center; font-size: 1em; color: grey;">It is nice to be at home</div>
+                    <div style="text-align: center; font-size: 10em;">🏠</div>
+                    <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">It is nice to be at home</div>
                     <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
                         <div style="text-align: center; min-width: 90px;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['temperature']:.1f}°C</div>
