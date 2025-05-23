@@ -413,7 +413,7 @@ with tab3:
                 humidity
             FROM {TABLE}
             ORDER BY timestamp DESC
-            LIMIT 100
+            LIMIT 200
         """
         rows = bq.query(sql).to_dataframe()
         rows['timestamp'] = pd.to_datetime(rows['timestamp'])
@@ -428,7 +428,6 @@ with tab3:
             st.download_button("Download CSV", data=csv, file_name='sensor_history.csv', mime='text/csv')
 
             # Temperature Plot
-            st.subheader("Temperature Over Time")
             fig_temp = px.line(
                 df_history,
                 x='timestamp',
@@ -447,8 +446,7 @@ with tab3:
                 line=dict(color='#f52727', width=4),
                 mode='lines',
                 fill='tonexty',
-                fillcolor='rgba(245, 39, 39, 0.31)',
-                hovertemplate=df_forecast['tooltip_temp']
+                fillcolor='rgba(255, 122, 38, 0.26)',
             )
             fig_temp.update_layout(
                 xaxis_title='Date',
@@ -463,7 +461,6 @@ with tab3:
             st.plotly_chart(fig_temp, use_container_width=True)
 
             # Humidity Plot
-            st.subheader("Humidity Over Time")
             fig_hum = px.line(
                 df_history,
                 x='timestamp',
@@ -476,7 +473,6 @@ with tab3:
                 mode='lines',
                 fill='tonexty',
                 fillcolor='rgba(38, 149, 255, 0.27)',
-                hovertemplate=df_forecast['tooltip_temp']
             )
             fig_hum.update_layout(
                 xaxis_title='Date',
@@ -494,6 +490,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Error loading sensor history: {str(e)}")
+
 
 
 
