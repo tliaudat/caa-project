@@ -103,6 +103,49 @@ The project integrates:
 
 <details>
   <summary><strong>Streamlit Dashboard</strong></summary> 
+  # Weather Monitor Dashboard — Streamlit App
+
+This Streamlit dashboard monitors both **outdoor** and **indoor** weather conditions with data sourced from an external weather API and indoor sensor readings stored in Google BigQuery.
+
+---
+
+## Features
+
+### Page Setup
+- Wide layout
+- Custom weather-themed icon
+- Expanded sidebar
+
+### Sidebar
+- Location input (default: **"Lausanne, CH"**)
+- Refresh button to clear cache and update data on demand
+
+### Main Layout
+Uses **tabs** to separate key sections:
+
+#### 1. Current Conditions (Tab 1)
+
+- **Outdoor Weather:**
+  - Fetches current weather for the selected location via a `DataFetcher` utility.
+  - Displays:
+    - Weather icon (e.g., sun, clouds, rain)
+    - Temperature, humidity, pressure, wind speed, cloud cover
+  - Stylish card layout with a large icon and metrics
+
+- **Indoor Conditions:**
+  - Fetches latest indoor sensor data (temperature, humidity, TVOC air quality) from BigQuery.
+  - Displays indoor metrics with warnings if humidity is too low.
+  - TVOC levels are translated into air quality descriptions and color-coded for easy interpretation.
+
+#### 2. Forecast (Tab 2)
+- Displays a weather forecast dataframe with icons and detailed timestamps  
+  *(partial code provided)*
+
+#### 3. History (Tab 3)
+- Tab present but not fully shown in snippet  
+- Likely for historical data visualizations
+
+---
 
 </details>
 
