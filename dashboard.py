@@ -306,64 +306,100 @@ with tab1:
 
 with tab2:
     st.header("Weather Forecast")
-    
+
     try:
         forecast_data = data_fetcher.get_forecast(location)
-        
+
         if forecast_data and 'forecast' in forecast_data:
             df_forecast = pd.DataFrame(forecast_data['forecast'])
             df_forecast['timestamp'] = pd.to_datetime(df_forecast['timestamp'])
-            
-            # Temperature forecast
-            st.subheader("Temperature Forecast")
+
+            # Optional: Map weather to icons
+            icon_map = {
+                "Clear": "☀️", "Clouds": "☁️", "Rain": "🌧️", "Snow": "❄️",
+                "Thunderstorm": "⛈️", "Drizzle": "🌦️", "Mist": "🌫️", "Fog": "🌫️"
+            }
+            df_forecast['icon'] = df_forecast['weather'].map(icon_map).fillna("🌤️")
+            df_forecast['tooltip_temp'] = (
+                df_forecast['timestamp'].dt.strftime("%a %b %d, %H:%M") +
+                "<br>" +
+                df_forecast['icon'] + " " +
+                df_forecast['temperature'].round(1).astype(str) + "°C"
+            )
+            df_forecast['tooltip_rain'] = (
+                df_forecast['timestamp'].dt.strftime("%a %b %d, %H:%M") +
+                "<br>☔ " +
+                df_forecast['rain_probability'].round(0).astype(str) + "%"
+            )
+
+            # Temperature Forecast Line Chart with Gradient Fill
             fig_forecast = px.line(
                 df_forecast,
                 x='timestamp',
                 y='temperature',
-                title='5-Day Temperature Forecast'
+                title='🌡️ 5-Day Temperature Forecast'
             )
+
+            fig_forecast.update_traces(
+                line=dict(color='#3498db', width=4),
+                mode='lines',
+                fill='tonexty',
+                fillcolor='rgba(52, 152, 219, 0.2)',
+                hovertemplate=df_forecast['tooltip_temp']
+            )
+
             fig_forecast.update_layout(
                 xaxis_title='Date',
                 yaxis_title='Temperature (°C)',
-                height=400,
-                showlegend=False,
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
+                height=420,
+                font=dict(family="Segoe UI, sans-serif", size=14),
+                plot_bgcolor='rgba(255,255,255,1)',
+                paper_bgcolor='rgba(255,255,255,1)',
+                margin=dict(t=50, l=50, r=50, b=50),
+                title_x=0.02,
             )
-            fig_forecast.update_traces(
-                line=dict(color='#3498db', width=3),
-                hovertemplate='%{x|%b %d, %H:%M}<br>%{y:.1f}°C<extra></extra>'
-            )
-            st.plotly_chart(fig_forecast, use_container_width=True)
-            
-            # Rain probability
-            st.subheader("Rain Probability")
+
+            # Rain Probability Bar Chart with Simulated Gradient
             fig_rain = px.bar(
                 df_forecast,
                 x='timestamp',
                 y='rain_probability',
-                title='5-Day Rain Probability'
+                title='🌧️ 5-Day Rain Probability',
+                color='rain_probability',
+                color_continuous_scale=['#85C1E9', '#2E86C1']
             )
+
+            fig_rain.update_traces(
+                hovertemplate=df_forecast['tooltip_rain'],
+                marker_line_color='rgba(0,0,0,0)',
+            )
+
             fig_rain.update_layout(
                 xaxis_title='Date',
                 yaxis_title='Probability (%)',
-                height=400,
-                showlegend=False,
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
+                height=420,
+                font=dict(family="Segoe UI, sans-serif", size=14),
+                plot_bgcolor='rgba(255,255,255,1)',
+                paper_bgcolor='rgba(255,255,255,1)',
+                coloraxis_showscale=False,
+                margin=dict(t=50, l=50, r=50, b=50),
+                title_x=0.02,
             )
-            fig_rain.update_traces(
-                marker_color='#3498db',
-                hovertemplate='%{x|%b %d, %H:%M}<br>%{y:.0f}%<extra></extra>'
-            )
-            st.plotly_chart(fig_rain, use_container_width=True)
-            
-            
+
+            # Display both plots side by side
+            col1, col2 = st.columns(2)
+            with col1:
+                st.plotly_chart(fig_forecast, use_container_width=True)
+            with col2:
+                st.plotly_chart(fig_rain, use_container_width=True)
+
         else:
             st.error("Unable to fetch forecast data")
-            
+
     except Exception as e:
         st.error(f"Error fetching forecast: {str(e)}")
+
+
 with tab3:
     st.header("Indoor Sensor History")
 
