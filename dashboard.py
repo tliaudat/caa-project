@@ -188,31 +188,31 @@ with tab1:
                             <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="display: flex; align-items: baseline; gap: 10px;">
                                     <div style="font-size: 1.8em; color: grey;">Temperature</div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['temperature']:.1f}°C</div>
+                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">            {weather_data['temperature']:.1f}°C</div>
                                 </div>
                             </div>
                             <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="display: flex; align-items: baseline; gap: 10px;">
                                     <div style="font-size: 1.8em; color: grey;">Humidity</div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['humidity']}%</div>
+                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">            {weather_data['humidity']}%</div>
                                 </div>
                             </div>
                             <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="display: flex; align-items: baseline; gap: 10px;">
                                     <div style="font-size: 1.8em; color: grey;">Pressure</div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['pressure']}hPa</div>
+                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">            {weather_data['pressure']}hPa</div>
                                 </div>
                             </div>
                             <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="display: flex; align-items: baseline; gap: 10px;">
                                     <div style="font-size: 1.8em; color: grey;">Wind Speed</div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['wind_speed']}m/s</div>
+                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">            {weather_data['wind_speed']}m/s</div>
                                 </div>
                             </div>
                             <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="display: flex; align-items: baseline; gap: 10px;">
                                     <div style="font-size: 1.8em; color: grey;">Cloud Cover</div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['clouds']}%</div>
+                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">            {weather_data['clouds']}%</div>
                                 </div>
                             </div>
                         </div>
