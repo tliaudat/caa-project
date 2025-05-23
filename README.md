@@ -103,7 +103,8 @@ The project integrates:
 
 <details>
   <summary><strong>Streamlit Dashboard</strong></summary> 
-  # Weather Monitor Dashboard — Streamlit App
+
+# Weather Monitor Dashboard — Streamlit App
 
 This Streamlit dashboard monitors both **outdoor** and **indoor** weather conditions with data sourced from an external weather API and indoor sensor readings stored in Google BigQuery.
 
@@ -146,8 +147,8 @@ Uses **tabs** to separate key sections:
 - Likely for historical data visualizations
 
 ---
-
 </details>
+
 
 
 ---
