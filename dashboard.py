@@ -402,15 +402,57 @@ with tab2:
 
 
 with tab3:
-    st.header("Indoor Sensor History")
+    st.markdown("""
+        <style>
+        .block-container {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+        .section-title {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin: 1em 0 0.2em 0;
+            color: #2c3e50;
+        }
+        .plot-card {
+            background: white;
+            padding: 1em;
+            border-radius: 20px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5em;
+        }
+        .stats-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .stat-box {
+            flex: 1;
+            padding: 1em;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .stat-label {
+            color: #7f8c8d;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<div class="section-title">Indoor Sensor History</div>', unsafe_allow_html=True)
 
     @st.cache_data(ttl=600)
     def fetch_sensor_history():
         sql = f"""
             SELECT
-            timestamp,
-            temperature,
-            humidity
+                timestamp,
+                temperature,
+                humidity
             FROM `{TABLE}`
             ORDER BY timestamp DESC
             LIMIT 30
@@ -423,37 +465,81 @@ with tab3:
         df_history = fetch_sensor_history()
 
         if not df_history.empty:
-            # Température dans le temps
+
+            #Download button
+            csv = df_history.to_csv(index=False).encode('utf-8')
+            st.download_button("⬇Download CSV", data=csv, file_name='sensor_history.csv', mime='text/csv')
+
+            #Stats
+            st.markdown('<div class="stats-container">', unsafe_allow_html=True)
+
+            for col, label, unit in [('temperature', 'Temperature (°C)', '°C'), ('humidity', 'Humidity (%)', '%')]:
+                stat_html = f"""
+                    <div class="stat-box">
+                        <div class="stat-value">{df_history[col].mean():.1f}{unit}</div>
+                        <div class="stat-label">Avg {label}</div>
+                        <div class="stat-value">{df_history[col].min():.1f}{unit}</div>
+                        <div class="stat-label">Min {label}</div>
+                        <div class="stat-value">{df_history[col].max():.1f}{unit}</div>
+                        <div class="stat-label">Max {label}</div>
+                    </div>
+                """
+                st.markdown(stat_html, unsafe_allow_html=True)
+
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            #Temperature Graph
+            st.markdown('<div class="plot-card">', unsafe_allow_html=True)
             st.subheader("Temperature Over Time")
-            fig_temp = px.line(
+
+            fig_temp = px.scatter(
                 df_history,
                 x='timestamp',
                 y='temperature',
+                color='temperature',
+                color_continuous_scale='Reds',
                 labels={'timestamp': 'Date', 'temperature': 'Temperature (°C)'},
-                title="Indoor Temperature History"
+                title=None
             )
+            fig_temp.update_traces(mode='lines+markers', line=dict(width=3))
             fig_temp.update_layout(
                 height=400,
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
+                margin=dict(t=10, b=40),
+                plot_bgcolor='rgba(255,255,255,0)',
+                paper_bgcolor='rgba(255,255,255,0)',
+                xaxis=dict(showgrid=False),
+                yaxis=dict(showgrid=True, gridcolor='rgba(200,200,200,0.2)'),
+                coloraxis_showscale=False
             )
             st.plotly_chart(fig_temp, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-            # Humidité dans le temps
-            st.subheader("Humidity Over Time")
+            #Humidity Graph
+            st.markdown('<div class="plot-card">', unsafe_allow_html=True)
+            st.subheader("💧 Humidity Over Time")
+
             fig_hum = px.line(
                 df_history,
                 x='timestamp',
                 y='humidity',
                 labels={'timestamp': 'Date', 'humidity': 'Humidity (%)'},
-                title="Indoor Humidity History"
+                title=None
+            )
+            fig_hum.update_traces(
+                line=dict(width=3, color='rgba(52, 152, 219, 1)'),
+                hovertemplate='%{x|%b %d, %H:%M}<br><b>%{y:.0f}%</b>'
             )
             fig_hum.update_layout(
                 height=400,
-                plot_bgcolor='rgba(0,0,0,0)',
-                paper_bgcolor='rgba(0,0,0,0)',
+                margin=dict(t=10, b=40),
+                plot_bgcolor='rgba(255,255,255,0)',
+                paper_bgcolor='rgba(255,255,255,0)',
+                xaxis=dict(showgrid=False),
+                yaxis=dict(showgrid=True, gridcolor='rgba(200,200,200,0.2)')
             )
             st.plotly_chart(fig_hum, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+
         else:
             st.warning("⚠️ No historical data available")
 
