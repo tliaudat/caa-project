@@ -269,21 +269,21 @@ with tab1:
                     <div class="condition-header">Indoor Weather</div>
                     <div style="text-align: center; font-size: 10em;">🏠</div>
                     <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">It is nice to be at home</div>
-                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
-                        <div style="text-align: center; min-width: 90px;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                        <div style="text-align: center; width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['temperature']:.1f}°C</div>
                             <div style="font-size: 1em; color: black;">Temperature</div>
                         </div>
-                        <div style="text-align: center; min-width: 90px;">
+                        <div style="text-align: center; width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['humidity']}%</div>
                             <div style="font-size: 1em; color: black;">Humidity</div>
                         </div>
-                        <div style="text-align: center; min-width: 90px;">
+                        <div style="text-align: center; width: 100%; padding: 10px;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['tvoc']:.1f}</div>
                             <div style="font-size: 1em; color: black;">TVOC</div>
                         </div>
                     </div>
-                    <div style="text-align: center; margin-top: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 5px;">
+                    <div style="text-align: center; margin-top: 15px; padding: 10px; border-radius: 5px;">
                         <div style="font-size: 1.2em; font-weight: bold; color: {air_quality_color};">{air_quality_desc}</div>
                     </div>
                 </div>
