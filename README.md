@@ -99,6 +99,9 @@ The project integrates:
 <details>
   <summary><strong>Google Cloud Deployment</strong></summary> 
 
+The deployment was done using **continuous deployment with GitHub**, starting first with the **middleware** branch and later the **dashboard** branch.
+
+For managing keys, we used **Google Cloud Key Manager** to securely handle credentials and redeploy the middleware with these keys.
 </details>
 
 <details>
@@ -145,8 +148,6 @@ Uses **tabs** to separate key sections:
 #### 3. History (Tab 3)
 - Tab present but not fully shown in snippet  
 - Likely for historical data visualizations
-
----
 </details>
 
 
