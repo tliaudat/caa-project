@@ -40,7 +40,7 @@ The project integrates:
 - [Streamlit](https://streamlit.io) for the cloud dashboard
 
 
-### Steps to follow
+### Steps to follow (to run it locally)
 
 - Download the code
 - add your google cloud creditentials json at the root of the project
