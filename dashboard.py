@@ -157,6 +157,7 @@ with tab1:
     
     # Create container with padding
     with st.container():
+        st.markdown(weather_html, unsafe_allow_html=True)
         col1, col2 = st.columns(2, gap="large")
         
         with col1:
