@@ -443,14 +443,22 @@ with tab3:
                     y='temperature'
                 ).data[0]
             ])
-            fig_temp.update_traces(line=dict(color='rgba(231, 76, 60, 1)', width=3))
-            fig_temp.update_layout(
-                height=400,
-                plot_bgcolor='rgba(255,255,255,0)',
-                paper_bgcolor='rgba(255,255,255,0)',
-                xaxis=dict(showgrid=False),
-                yaxis=dict(showgrid=True, gridcolor='rgba(200,200,200,0.2)'),
+            fig_temp.update_traces(
+                line=dict(color='#e74c3c', width=4),
+                mode='lines',
+                fill='tonexty',
                 fillcolor='rgba(231, 76, 60, 0.2)',
+                hovertemplate=df_forecast['tooltip_temp']
+            )
+            fig_forecast.update_layout(
+                xaxis_title='Date',
+                yaxis_title='Temperature (°C)',
+                height=420,
+                font=dict(family="Segoe UI, sans-serif", size=14),
+                plot_bgcolor='rgba(255,255,255,1)',
+                paper_bgcolor='rgba(255,255,255,1)',
+                margin=dict(t=50, l=50, r=50, b=50),
+                title_x=0.02,
             )
             st.plotly_chart(fig_temp, use_container_width=True)
 
