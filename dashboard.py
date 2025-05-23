@@ -178,32 +178,30 @@ with tab1:
                     
                     weather_icon = weather_icons.get(weather_data['weather'], "🌤️")
                     
+
                     weather_html = f"""
                     <div class="weather-card">
                         <div class="condition-header">Outdoor Weather</div>
                         <div style="text-align: center; font-size: 10em;">{weather_icon}</div>
                         <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">{weather_data['description']}</div>
-                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
-                            <div style="text-align: center; min-width: 90px;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                            <div style="text-align: center; width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['temperature']:.1f}°C</div>
                                 <div style="font-size: 1em; color: black;">Temperature</div>
                             </div>
-                            <div style="text-align: center; min-width: 90px;">
+                            <div style="text-align: center; width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['humidity']}%</div>
                                 <div style="font-size: 1em; color: black;">Humidity</div>
                             </div>
-                            <div style="text-align: center; min-width: 90px;">
+                            <div style="text-align: center; width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['pressure']} hPa</div>
                                 <div style="font-size: 1em; color: black;">Pressure</div>
                             </div>
-                        </div>
-                        <br>
-                        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
-                            <div style="text-align: center; min-width: 90px;">
+                            <div style="text-align: center; width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['wind_speed']} m/s</div>
                                 <div style="font-size: 1em; color: black;">Wind Speed</div>
                             </div>
-                            <div style="text-align: center; min-width: 90px;">
+                            <div style="text-align: center; width: 100%; padding: 10px;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['clouds']}%</div>
                                 <div style="font-size: 1em; color: black;">Cloud Cover</div>
                             </div>
@@ -272,19 +270,20 @@ with tab1:
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
                         <div style="text-align: center; width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['temperature']:.1f}°C</div>
-                            <div style="font-size: 1em; color: black;">Temperature</div>
+                            <div style="font-size: 1em; color: grey;">Temperature</div>
                         </div>
                         <div style="text-align: center; width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['humidity']}%</div>
-                            <div style="font-size: 1em; color: black;">Humidity</div>
+                            <div style="font-size: 1em; color: grey;">Humidity</div>
                         </div>
                         <div style="text-align: center; width: 100%; padding: 10px;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['tvoc']:.1f}</div>
-                            <div style="font-size: 1em; color: black;">TVOC</div>
+                            <div style="font-size: 1em; color: grey;">TVOC</div>
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 15px; padding: 10px; border-radius: 5px;">
-                        <div style="font-size: 1.2em; font-weight: bold; color: {air_quality_color};">{air_quality_desc}</div>
+                        <div style="font-size: 1.8em; font-weight: bold; color: {air_quality_color};">{air_quality_desc}</div>
+                        <div style="font-size: 1em; color: grey;">Air Quality</div>
                     </div>
                 </div>
                 """
