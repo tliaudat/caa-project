@@ -184,40 +184,33 @@ with tab1:
                         <div class="condition-header">Outdoor Weather</div>
                         <div style="text-align: center; font-size: 10em;">{weather_icon}</div>
                         <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">{weather_data['description']}</div>
-                        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
-                            <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
-                                <div style="display: flex; align-items: baseline; gap: 10px;">
-                                    <div style="font-size: 1.8em; color: grey;">Temperature            </div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['temperature']:.1f}°C</div>
-                                </div>
+                        <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+                    """
+                    
+                    # Define the fields to render
+                    fields = [
+                        ("Temperature", f"{weather_data['temperature']:.1f}°C"),
+                        ("Humidity", f"{weather_data['humidity']}%"),
+                        ("Pressure", f"{weather_data['pressure']} hPa"),
+                        ("Wind Speed", f"{weather_data['wind_speed']} m/s"),
+                        ("Cloud Cover", f"{weather_data['clouds']}%"),
+                    ]
+                    
+                    # Build each line with label on left and value on right
+                    for i, (label, value) in enumerate(fields):
+                        border_style = "border-bottom: 1px solid #eee;" if i < len(fields) - 1 else ""
+                        weather_html += f"""
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; {border_style}">
+                                <span style="font-size: 1em; color: grey;">{label}</span>
+                                <span style="font-size: 1.4em; font-weight: bold; color: black;">{value}</span>
                             </div>
-                            <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
-                                <div style="display: flex; align-items: baseline; gap: 10px;">
-                                    <div style="font-size: 1.8em; color: grey;">Humidity            </div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['humidity']}%</div>
-                                </div>
-                            </div>
-                            <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
-                                <div style="display: flex; align-items: baseline; gap: 10px;">
-                                    <div style="font-size: 1.8em; color: grey;">Pressure            </div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['pressure']}hPa</div>
-                                </div>
-                            </div>
-                            <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
-                                <div style="display: flex; align-items: baseline; gap: 10px;">
-                                    <div style="font-size: 1.8em; color: grey;">Wind Speed            </div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['wind_speed']}m/s</div>
-                                </div>
-                            </div>
-                            <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
-                                <div style="display: flex; align-items: baseline; gap: 10px;">
-                                    <div style="font-size: 1.8em; color: grey;">Cloud Cover            </div>
-                                    <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['clouds']}%</div>
-                                </div>
-                            </div>
+                        """
+                    
+                    weather_html += """
                         </div>
                     </div>
                     """
+
                     
                     st.markdown(weather_html, unsafe_allow_html=True)
                     
@@ -277,21 +270,18 @@ with tab1:
                     <div class="condition-header">Indoor Weather</div>
                     <div style="text-align: center; font-size: 10em;">🏠</div>
                     <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">It is nice to be at home</div>
-
                     <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                         <div style="display: flex; align-items: baseline; gap: 10px;">
                             <div style="font-size: 1.8em; color: grey;">Temperature</div>
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['temperature']:.1f}°C</div>
                         </div>
                     </div>
-                    
                     <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                         <div style="display: flex; align-items: baseline; gap: 10px;">
                             <div style="font-size: 1.8em; color: grey;">Humidity</div>
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['humidity']}%</div>
                         </div>
                     </div>
-                    
                     <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                         <div style="display: flex; align-items: baseline; gap: 10px;">
                             <div style="font-size: 1.8em; color: grey;">Air Quality</div>
