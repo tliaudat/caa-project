@@ -185,7 +185,7 @@ with tab1:
                     weather_html = f"""
                     <div class="weather-card">
                         <div class="condition-header">🌤️ Outdoor Weather</div>
-                        <div style="text-align: center; font-size: 4em; margin: 20px 0;">{weather_icon}</div>
+                        <div style="text-align: center; font-size: 10em; margin: 20px 0;">{weather_icon}</div>
                         <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
                             <div style="text-align: center; min-width: 90px;">
                                 <div style="font-size: 1.8em; font-weight: bold; color: black;">{weather_data['temperature']:.1f}°C</div>
@@ -245,6 +245,7 @@ with tab1:
                         ⚠️ Indoor humidity is below 40% – this might be too dry. Consider using a humidifier.
                     </div>
                     """
+                
                 # Get air quality description based on TVOC value
                 tvoc_value = sensor_data['tvoc']
                 if tvoc_value <= 50:
@@ -265,31 +266,30 @@ with tab1:
                 else:
                     air_quality_desc = 'You are going to die'
                     air_quality_color = '#6f42c1'  # Purple
-
                 
                 indoor_html = f"""
                 <div class="weather-card">
                     <div class="condition-header">Indoor Weather</div>
-                    <div style="text-align: center; font-size: 8em;">🏠</div>
+                    <div style="text-align: center; font-size: 10em;">🏠</div>
                     <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">It is nice to be at home</div>
-                    <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
-                        <div style="display: flex; align-items: baseline; gap: 10px;">
-                            <div style="font-size: 1.8em; color: grey;">Temperature</div>
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 15px;">
+                        <div style="text-align: center; min-width: 90px;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['temperature']:.1f}°C</div>
+                            <div style="font-size: 1em; color: black;">Temperature</div>
                         </div>
-                    </div>
-                    <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
-                        <div style="display: flex; align-items: baseline; gap: 10px;">
-                            <div style="font-size: 1.8em; color: grey;">Humidity</div>
+                        <div style="text-align: center; min-width: 90px;">
                             <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['humidity']}%</div>
+                            <div style="font-size: 1em; color: black;">Humidity</div>
+                        </div>
+                        <div style="text-align: center; min-width: 90px;">
+                            <div style="font-size: 1.8em; font-weight: bold; color: black;">{sensor_data['tvoc']:.1f}</div>
+                            <div style="font-size: 1em; color: black;">TVOC</div>
                         </div>
                     </div>
-                    <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
-                        <div style="display: flex; align-items: baseline; gap: 10px;">
-                            <div style="font-size: 1.8em; color: grey;">Air Quality</div>
-                            <div style="font-size: 1.8em; font-weight: bold; color: {air_quality_color};">{air_quality_desc}</div>
-                        </div>
+                    <div style="text-align: center; margin-top: 15px; padding: 10px; border-radius: 5px;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: {air_quality_color};">{air_quality_desc}</div>
                     </div>
+                </div>
                 """
                 
                 st.markdown(indoor_html, unsafe_allow_html=True)
@@ -303,7 +303,6 @@ with tab1:
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
-
 
 with tab2:
     st.header("Weather Forecast")
