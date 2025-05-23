@@ -408,17 +408,20 @@ with tab3:
             padding: 2rem 2rem 2rem 2rem;
         }
         .section-title {
-            font-size: 1.8em;
+            font-size: 1.6em;
             font-weight: 600;
-            margin: 1em 0 0.2em 0;
-            color: #2c3e50;
+            margin: 1em 0 0.5em 0;
+            color: #1c1c1e;
         }
         .plot-card {
-            background: white;
-            padding: 1em;
-            border-radius: 20px;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 1.5em;
+            background: #ffffff;
+            padding: 1.5em;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2em;
+        }
+        .download-container {
+            margin: 1em 0 2em 0;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -444,54 +447,57 @@ with tab3:
         df_history = fetch_sensor_history()
 
         if not df_history.empty:
+
             # Download button
             csv = df_history.to_csv(index=False).encode('utf-8')
+            st.markdown('<div class="download-container">', unsafe_allow_html=True)
             st.download_button("Download CSV", data=csv, file_name='sensor_history.csv', mime='text/csv')
-            
-            # Temperature Gradient Plot
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            # Temperature Graph with fill
             st.markdown('<div class="plot-card">', unsafe_allow_html=True)
             st.subheader("Temperature Over Time")
-            fig_temp = px.line(
-                df_history,
-                x='timestamp',
-                y='temperature',
-                labels={'timestamp': 'Date', 'temperature': 'Temperature (°C)'},
-                title=None
-            )
-            fig_temp.update_traces(
-                line=dict(width=3, color='rgba(231, 76, 60, 1)'),  # red tone
+
+            fig_temp = go.Figure()
+            fig_temp.add_trace(go.Scatter(
+                x=df_history['timestamp'],
+                y=df_history['temperature'],
+                mode='lines',
+                line=dict(color='rgb(231, 76, 60)', width=3),
+                fill='tozeroy',
+                fillcolor='rgba(231, 76, 60, 0.2)',
                 hovertemplate='%{x|%b %d, %H:%M}<br><b>%{y:.1f}°C</b>'
-            )
+            ))
             fig_temp.update_layout(
                 height=400,
                 margin=dict(t=10, b=40),
-                plot_bgcolor='rgba(255,255,255,0)',
-                paper_bgcolor='rgba(255,255,255,0)',
-                xaxis=dict(showgrid=False),
-                yaxis=dict(showgrid=True, gridcolor='rgba(200,200,200,0.2)')
+                plot_bgcolor='#ffffff',
+                paper_bgcolor='#ffffff',
+                xaxis=dict(title='Time', showgrid=False),
+                yaxis=dict(title='Temperature (°C)', showgrid=True, gridcolor='rgba(200,200,200,0.2)')
             )
             st.plotly_chart(fig_temp, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
-            # Humidity Gradient Plot
+            # Humidity Graph
             st.markdown('<div class="plot-card">', unsafe_allow_html=True)
-            st.subheader("💧 Humidity Over Time")
+            st.subheader("Humidity Over Time")
+
             fig_hum = px.line(
                 df_history,
                 x='timestamp',
                 y='humidity',
-                labels={'timestamp': 'Date', 'humidity': 'Humidity (%)'},
-                title=None
+                labels={'timestamp': 'Time', 'humidity': 'Humidity (%)'},
             )
             fig_hum.update_traces(
-                line=dict(width=3, color='rgba(52, 152, 219, 1)'),  # blue tone
+                line=dict(width=3, color='rgba(52, 152, 219, 1)'),
                 hovertemplate='%{x|%b %d, %H:%M}<br><b>%{y:.0f}%</b>'
             )
             fig_hum.update_layout(
                 height=400,
                 margin=dict(t=10, b=40),
-                plot_bgcolor='rgba(255,255,255,0)',
-                paper_bgcolor='rgba(255,255,255,0)',
+                plot_bgcolor='#ffffff',
+                paper_bgcolor='#ffffff',
                 xaxis=dict(showgrid=False),
                 yaxis=dict(showgrid=True, gridcolor='rgba(200,200,200,0.2)')
             )
@@ -499,10 +505,11 @@ with tab3:
             st.markdown('</div>', unsafe_allow_html=True)
 
         else:
-            st.warning("⚠️ No historical data available")
+            st.warning("No historical data available")
 
     except Exception as e:
-        st.error(f"❌ Error loading sensor history: {str(e)}")
+        st.error(f"Error loading sensor history: {str(e)}")
+
 
 
 # Footer
