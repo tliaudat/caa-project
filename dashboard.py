@@ -314,7 +314,7 @@ with tab2:
             df_forecast = pd.DataFrame(forecast_data['forecast'])
             df_forecast['timestamp'] = pd.to_datetime(df_forecast['timestamp'])
 
-            # Optional: Map weather to icons
+            # Icon map
             icon_map = {
                 "Clear": "☀️", "Clouds": "☁️", "Rain": "🌧️", "Snow": "❄️",
                 "Thunderstorm": "⛈️", "Drizzle": "🌦️", "Mist": "🌫️", "Fog": "🌫️"
@@ -332,22 +332,20 @@ with tab2:
                 df_forecast['rain_probability'].round(0).astype(str) + "%"
             )
 
-            # Temperature Forecast Line Chart with Gradient Fill
+            # Temperature forecast: red gradient
             fig_forecast = px.line(
                 df_forecast,
                 x='timestamp',
                 y='temperature',
                 title='🌡️ 5-Day Temperature Forecast'
             )
-
             fig_forecast.update_traces(
-                line=dict(color='#3498db', width=4),
+                line=dict(color='#e74c3c', width=4),
                 mode='lines',
                 fill='tonexty',
-                fillcolor='rgba(52, 152, 219, 0.2)',
+                fillcolor='rgba(231, 76, 60, 0.2)',
                 hovertemplate=df_forecast['tooltip_temp']
             )
-
             fig_forecast.update_layout(
                 xaxis_title='Date',
                 yaxis_title='Temperature (°C)',
@@ -359,21 +357,19 @@ with tab2:
                 title_x=0.02,
             )
 
-            # Rain Probability Bar Chart with Simulated Gradient
+            # Rain probability chart with gradient
             fig_rain = px.bar(
                 df_forecast,
                 x='timestamp',
                 y='rain_probability',
                 title='🌧️ 5-Day Rain Probability',
                 color='rain_probability',
-                color_continuous_scale=['#85C1E9', '#2E86C1']
+                color_continuous_scale=['#AED6F1', '#2E86C1']
             )
-
             fig_rain.update_traces(
                 hovertemplate=df_forecast['tooltip_rain'],
                 marker_line_color='rgba(0,0,0,0)',
             )
-
             fig_rain.update_layout(
                 xaxis_title='Date',
                 yaxis_title='Probability (%)',
@@ -386,18 +382,23 @@ with tab2:
                 title_x=0.02,
             )
 
-            # Display both plots side by side
+            # Display plots side by side
             col1, col2 = st.columns(2)
             with col1:
                 st.plotly_chart(fig_forecast, use_container_width=True)
             with col2:
                 st.plotly_chart(fig_rain, use_container_width=True)
 
+            # Optional: Enable animation across time (uncomment below if needed)
+            # fig_forecast.update_layout(updatemenus=[dict(type='buttons', showactive=False)])
+            # fig_forecast.update_traces(mode='lines+markers')
+
         else:
             st.error("Unable to fetch forecast data")
 
     except Exception as e:
         st.error(f"Error fetching forecast: {str(e)}")
+
 
 
 with tab3:
