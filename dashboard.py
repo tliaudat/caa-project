@@ -69,6 +69,8 @@ st.markdown("""
     }
     
     .weather-card {
+        width: 100%;
+        box-sizing: border-box;
         background-color: #ffffff;
         padding: 1.5rem;
         border-radius: 12px;
@@ -157,7 +159,6 @@ with tab1:
     
     # Create container with padding
     with st.container():
-        st.markdown(weather_html, unsafe_allow_html=True)
         col1, col2 = st.columns(2, gap="large")
         
         with col1:
@@ -183,7 +184,7 @@ with tab1:
                     weather_html = f"""
                     <div class="weather-card">
                         <div class="condition-header">Outdoor Weather</div>
-                        <div style="text-align: center; font-size: 10em;">{weather_icon}</div>
+                        <div style="text-align: center; font-size: 8em;">{weather_icon}</div>
                         <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">{weather_data['description']}</div>
                         <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
                     """
@@ -269,7 +270,7 @@ with tab1:
                 indoor_html = f"""
                 <div class="weather-card">
                     <div class="condition-header">Indoor Weather</div>
-                    <div style="text-align: center; font-size: 10em;">🏠</div>
+                    <div style="text-align: center; font-size: 8em;">🏠</div>
                     <div style="text-align: center; font-size: 1em; color: grey; margin: 20px 0;">It is nice to be at home</div>
                     <div style="width: 100%; padding: 10px; border-bottom: 1px solid #eee;">
                         <div style="display: flex; align-items: baseline; gap: 10px;">
