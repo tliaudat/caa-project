@@ -156,7 +156,7 @@ Uses **tabs** to separate key sections:
 
 # Stratos Smart Weather Monitor
 
-**Video Demonstration (YouTube):** [the real demo](https://youtu.be/kLK2LLKLoj4)
+**Video Demonstration (YouTube):** [the real demo](https://youtu.be/sYk2q6jQYAU)
 
 ---
 
