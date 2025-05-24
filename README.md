@@ -111,7 +111,8 @@ For managing keys, we used **Google Cloud Key Manager** to securely handle crede
 
 This Streamlit dashboard monitors both **outdoor** and **indoor** weather conditions with data sourced from an external weather API and indoor sensor readings stored in Google BigQuery.
 
-link to dashboard [here](https://caa-project-dashboard-972566364424.europe-west6.run.app/)
+link to middleware [here](https://caa-project-middleware-972566364424.europe-west6.run.app/)
+link to dashboard [there](https://caa-project-dashboard-972566364424.europe-west6.run.app/)
 
 ---
 
