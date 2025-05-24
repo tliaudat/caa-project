@@ -433,7 +433,7 @@ while True:
     counter = 0
     
     
-  if counter_2 >= 500 and (pir_0.state)==1:
+  if counter_2 >= 1200000 and (pir_0.state)==1:
    generate_and_download_audio()
    speaker.playWAV('/flash/announcement.wav', volume=5)
    counter_2 = 0
