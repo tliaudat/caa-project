@@ -19,7 +19,7 @@ env3_0 = unit.get(unit.ENV3, unit.PORTA)
 pir_0 = unit.get(unit.PIR, unit.PORTB)
 tvoc_0 = unit.get(unit.TVOC, unit.PORTC)
 
-SERVER_URL = 'http://192.168.1.117:8080/upload'
+SERVER_URL = 'https://caa-project-middleware-972566364424.europe-west6.run.app//upload'
 AUDIO_TRIGGER_URL = 'http://192.168.1.117:8080/announce'
 AUDIO_DOWNLOAD_URL = 'http://192.168.1.117:8080/audio'
 AUDIO_FILE_PATH = '/flash/announcement.wav'
